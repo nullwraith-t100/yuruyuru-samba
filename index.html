@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yuruyuru Samba — toque infinito</title>
+<meta name="description" content="Pagina que toca yuruyuru_samba.mp4 em loop infinito no GitHub Pages.">
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    height: 100%;
+    margin: 0;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 55%, #312e81 100%);
+    color: #f8fafc;
+    display: grid;
+    place-items: center;
+  }
+  .card {
+    width: min(92vw, 460px);
+    padding: 40px 28px;
+    border-radius: 24px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+    text-align: center;
+    backdrop-filter: blur(12px);
+  }
+  h1 { margin: 0 0 8px; font-size: 1.6rem; letter-spacing: -0.5px; }
+  h1 .em { color: #22d3ee; }
+  p.sub { margin: 0 0 26px; color: #cbd5e1; font-size: 0.95rem; }
+  .badge {
+    display: inline-block;
+    margin-bottom: 22px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: rgba(34,211,238,0.15);
+    color: #22d3ee;
+    border: 1px solid rgba(34,211,238,0.4);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+  }
+  audio { width: 100%; max-width: 320px; margin: 14px 0 6px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.35)); }
+  .controls { display: flex; gap: 10px; justify-content: center; align-items: center; }
+  button {
+    appearance: none;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 22px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform .06s, opacity .2s, filter .2s;
+  }
+  .play { background: #22d3ee; color: #0f172a; box-shadow: 0 0 0 0 rgba(34,211,238,0); }
+  .play:hover { background: #67e8f9; filter: brightness(1.05); }
+  .play:active { transform: scale(0.97); }
+  .stop { background: rgba(255,255,255,0.12); color: #f8fafc; border: 1px solid rgba(255,255,255,0.3); }
+  .stop:hover { background: rgba(255,255,255,0.22); }
+  .note { margin-top: 24px; font-size: 0.8rem; color: #94a3b8; line-height: 1.5; }
+  .note b { color: #cbd5e1; }
+  @media (max-width: 480px) {
+    .card { padding: 30px 20px; }
+    h1 { font-size: 1.35rem; }
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="badge">GitHub Pages &bull; loop infinito</div>
+  <h1>Yuruyuru <span class="em">Samba</span></h1>
+  <p class="sub">A pagina toca <b>yuruyuru_samba.mp4</b> repetindo para sempre.</p>
+  <audio id="audio" src="yuruyuru_samba.mp4" loop preload="auto"></audio>
+  <div class="controls">
+    <button id="btn" class="play">&#9654; Tocar m&uacute;sica</button>
+    <button id="btnStop" class="stop" style="display:none;">&#9632; Parar</button>
+  </div>
+  <p class="note">Os navegadores bloqueiam reproduzimento autom&aacute;tico de at&eacute; voc&ecirc; interagir. Clique em <b>Tocar m&uacute;sica</b> e o samba roda em loop infinito.</p>
+</div>
+<script>
+  (function(){
+    var audio = document.getElementById('audio');
+    var btn = document.getElementById('btn');
+    var btnStop = document.getElementById('btnStop');
+    var playing = false;
+
+    function setPlaying(p){
+      playing = p;
+      if(p){
+        btn.style.display = 'none';
+        btnStop.style.display = 'inline-block';
+        btnStop.textContent = '&#9632; Parar';
+      } else {
+        btn.style.display = 'inline-block';
+        btnStop.style.display = 'none';
+        btn.textContent = '&#9654; Tocar m&uacute;sica';
+      }
+    }
+
+    btn.addEventListener('click', function(){
+      audio.play().then(function(){
+        setPlaying(true);
+      }).catch(function(err){
+        console.warn('Nao foi possivel iniciar a reproducao automaticamente:', err);
+      });
+    });
+
+    btnStop.addEventListener('click', function(){
+      audio.pause();
+      audio.currentTime = 0;
+      setPlaying(false);
+    });
+
+    // Tenta autoplay (bloqueado na maioria dos navegadores ate o primeiro clique)
+    audio.play().then(function(){
+      setPlaying(true);
+    }).catch(function(){
+      // fica no estado "clique para tocar"
+    });
+  })();
+</script>
+</body>
+</html>
